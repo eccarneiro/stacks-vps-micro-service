@@ -16,15 +16,17 @@ services:
 
     # console
       - traefik.http.routers.s3.rule=Host(`s3.$GATEWAY_HOST`)
-      - traefik.http.routers.s3.entrypoints=web
+      - traefik.http.routers.s3.entrypoints=web,websecure
+      - traefik.http.routers.s3.tls.certresolver=letsencrypt
       - traefik.http.services.s3.loadbalancer.server.port=9000
       - traefik.http.routers.s3.service=s3
 
     # Api
-      - "traefik.http.routers.minio.rule=Host(`minio.$GATEWAY_HOST`)"
-      - "traefik.http.routers.minio.entrypoints=web"
-      - "traefik.http.services.minio.loadbalancer.server.port=9001"
-      - "traefik.http.routers.minio.service=minio"
+      - traefik.http.routers.minio.rule=Host(`minio.$GATEWAY_HOST`)
+      - traefik.http.routers.minio.entrypoints=web,websecure
+      - traefik.http.routers.minio.tls.certresolver=letsencrypt
+      - traefik.http.services.minio.loadbalancer.server.port=9001
+      - traefik.http.routers.minio.service=minio
   createbuckets:
     image: minio/mc
     networks:

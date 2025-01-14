@@ -1,6 +1,7 @@
 typebot-data
 
 traefik-data
+traefik-letsencrypt
 
 portainer-data
 

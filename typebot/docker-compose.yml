@@ -33,7 +33,8 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.typebotbuilder.rule=Host(`typebot.$GATEWAY_HOST`)
-      - traefik.http.routers.typebotbuilder.entrypoints=web
+      - traefik.http.routers.typebotbuilder.entrypoints=web,websecure
+      - traefik.http.routers.typebotbuilder.tls.certresolver=letsencrypt
       - traefik.http.services.typebotbuilder.loadbalancer.server.port=3000
 
   typebot-viewer:
@@ -50,7 +51,8 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.typebotviewer.rule=Host(`bot.$GATEWAY_HOST`)
-      - traefik.http.routers.typebotviewer.entrypoints=web
+      - traefik.http.routers.typebotviewer.entrypoints=web,websecure
+      - traefik.http.routers.typebotviewer.tls.certresolver=letsencrypt
       - traefik.http.services.typebotviewer.loadbalancer.server.port=3000
 
 networks:
