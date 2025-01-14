@@ -1,21 +1,30 @@
 services:
   minio:
     image: minio/minio
-    command: server /data
+    command: server /data --console-address ":9001"
     restart: unless-stopped
     env_file: .env
     expose:
       - 9000
+      - 9001
     volumes:
       - ./minio-data:/data
     networks:
       - stack-test
     labels:
       - traefik.enable=true
-      - traefik.http.routers.minio.rule=Host(`s3.$GATEWAY_HOST`)
-      - traefik.http.routers.minio.entrypoints=web
-      - traefik.http.services.minio.loadbalancer.server.port=9000
 
+    # console
+      - traefik.http.routers.s3.rule=Host(`s3.$GATEWAY_HOST`)
+      - traefik.http.routers.s3.entrypoints=web
+      - traefik.http.services.s3.loadbalancer.server.port=9000
+      - traefik.http.routers.s3.service=s3
+
+    # Api
+      - "traefik.http.routers.minio.rule=Host(`minio.$GATEWAY_HOST`)"
+      - "traefik.http.routers.minio.entrypoints=web"
+      - "traefik.http.services.minio.loadbalancer.server.port=9001"
+      - "traefik.http.routers.minio.service=minio"
   createbuckets:
     image: minio/mc
     networks:
