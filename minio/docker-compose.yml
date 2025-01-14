@@ -1,0 +1,37 @@
+services:
+  minio:
+    image: minio/minio
+    command: server /data
+    restart: unless-stopped
+    env_file: .env
+    expose:
+      - 9000
+    volumes:
+      - ./minio-data:/data
+    networks:
+      - stack-test
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.minio.rule=Host(`s3.$GATEWAY_HOST`)
+      - traefik.http.routers.minio.entrypoints=web
+      - traefik.http.services.minio.loadbalancer.server.port=9000
+
+  createbuckets:
+    image: minio/mc
+    networks:
+      - stack-test
+    depends_on:
+      - minio
+    restart: unless-stopped
+    entrypoint: >
+      /bin/sh -c "
+      sleep 10;
+      /usr/bin/mc config host add minio http://minio:9000 minio minio123;
+      /usr/bin/mc mb minio/typebot;
+      /usr/bin/mc anonymous set public minio/typebot/public;
+      exit 0;
+      "
+
+networks:
+  stack-test:
+    external: true

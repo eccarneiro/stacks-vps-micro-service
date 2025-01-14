@@ -1,0 +1,58 @@
+services:
+  typebot-db:
+    image: postgres:16
+    restart: unless-stopped
+    volumes:
+      - ./typebot-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=typebot
+      - POSTGRES_PASSWORD=typebot
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+    expose:
+      - 5432
+    networks:
+      - stack-test
+
+  typebot-builder:
+    image: baptistearno/typebot-builder:latest
+    restart: unless-stopped
+    depends_on:
+      typebot-db:
+        condition: service_healthy
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    env_file: .env
+    expose:
+      - 3000
+    networks:
+      - stack-test
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.typebotbuilder.rule=Host(`typebot.$GATEWAY_HOST`)
+      - traefik.http.routers.typebotbuilder.entrypoints=web
+      - traefik.http.services.typebotbuilder.loadbalancer.server.port=3000
+
+  typebot-viewer:
+    image: baptistearno/typebot-viewer:latest
+    depends_on:
+      typebot-db:
+        condition: service_healthy
+    restart: unless-stopped
+    env_file: .env
+    expose:
+      - 3000
+    networks:
+      - stack-test
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.typebotviewer.rule=Host(`bot.$GATEWAY_HOST`)
+      - traefik.http.routers.typebotviewer.entrypoints=web
+      - traefik.http.services.typebotviewer.loadbalancer.server.port=3000
+
+networks:
+  stack-test:
+    external: true
