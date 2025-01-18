@@ -10,7 +10,7 @@ services:
     volumes:
       - ./minio-data:/data
     networks:
-      - stack-test
+      - growon
     labels:
       - traefik.enable=true
 
@@ -30,7 +30,7 @@ services:
   createbuckets:
     image: minio/mc
     networks:
-      - stack-test
+      - growon
     depends_on:
       - minio
     restart: unless-stopped
@@ -44,5 +44,5 @@ services:
       "
 
 networks:
-  stack-test:
+  growon:
     external: true

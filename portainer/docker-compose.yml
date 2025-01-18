@@ -14,8 +14,8 @@ services:
       - traefik.http.routers.portainer.tls.certresolver=letsencrypt
       - traefik.http.services.portainer.loadbalancer.server.port=9000
     networks:
-      - stack-test
+      - growon
 
 networks:
-  stack-test:
+  growon:
     external: true
