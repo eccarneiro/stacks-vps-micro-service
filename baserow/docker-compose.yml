@@ -1,0 +1,26 @@
+services:
+  baserow:
+    image: baserow/baserow:1.30.1
+    container_name: baserow
+    networks:
+      - growon
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.baserow.rule=Host(`baserow.$GATEWAY_HOST`)
+      - traefik.http.routers.baserow.entrypoints=web,websecure
+      - traefik.http.routers.baserow.tls.certresolver=letsencrypt
+      - traefik.http.services.baserow.loadbalancer.server.port=80
+    environment:
+      - BASEROW_PUBLIC_URL=https://baserow.growonit.online
+    volumes:
+      - baserow_data:/baserow/data
+    restart: unless-stopped
+
+    expose:
+      - 80
+volumes:
+  baserow_data:
+
+networks:
+  growon:
+    external: true
