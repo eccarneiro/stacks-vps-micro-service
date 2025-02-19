@@ -1,26 +1,49 @@
+
 services:
-  evolution-api:
+  api:
     container_name: evolution_api
-    image: atendai/evolution-api:v2.1.1
+    image: atendai/evolution-api
     restart: always
-    ports:
-      - "8080:8080"
-    env_file:
-      - .env
+    depends_on:
+      - postgres
     volumes:
       - evolution_instances:/evolution/instances
     networks:
-      - evolution-net
+      - growon
+    env_file:
+      - .env
+    expose:
+      - 8080
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.evolution.rule=Host(`api.growonit.online`)"
-      - "traefik.http.routers.evolution.entrypoints=websecure"
-      - "traefik.http.routers.evolution.tls.certresolver=letsencrypt"
-      - "traefik.http.services.evolution.loadbalancer.server.port=8080"
+      - traefik.enable=true
+      - traefik.http.routers.evolution.rule=Host(`api.growonit.online`)
+      - traefik.http.routers.evolution.entrypoints=websecure
+      - traefik.http.routers.evolution.tls.certresolver=letsencrypt
+      - traefik.http.services.evolution.loadbalancer.server.port=8080
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    networks:
+      - growon
+    command: ["postgres", "-c", "max_connections=1000", "-c", "listen_addresses=*"]
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=evolution
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    expose:
+      - 5432
 
 volumes:
   evolution_instances:
+  postgres_data:
+
 
 networks:
-  evolution-net:
+  growon:
     external: true
