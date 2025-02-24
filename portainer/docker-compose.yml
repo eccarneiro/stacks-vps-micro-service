@@ -13,6 +13,7 @@ services:
       - traefik.http.routers.portainer.entrypoints=web,websecure
       - traefik.http.routers.portainer.tls.certresolver=letsencrypt
       - traefik.http.services.portainer.loadbalancer.server.port=9000
+      - traefik.http.routers.portainer.middlewares=authelia@docker
     networks:
       - growon
 

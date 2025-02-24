@@ -1,0 +1,9 @@
+users:
+  growon:
+    disabled: false
+    displayname: "GrowOnIT"
+    password: "$2a$12$oBNTeJtX9Vb0ZsMosPZw0ulNa6oSFb954je5AZdEC2iXQ615iSWNS"
+    email: dev@growonit.online
+    groups:
+      - admins
+      - dev

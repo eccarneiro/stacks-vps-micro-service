@@ -20,6 +20,7 @@ services:
       - traefik.http.routers.s3.tls.certresolver=letsencrypt
       - traefik.http.services.s3.loadbalancer.server.port=9000
       - traefik.http.routers.s3.service=s3
+      - traefik.http.routers.s3.middlewares=authelia@docker
 
     # Api
       - traefik.http.routers.minio.rule=Host(`minio.$GATEWAY_HOST`)
@@ -27,6 +28,7 @@ services:
       - traefik.http.routers.minio.tls.certresolver=letsencrypt
       - traefik.http.services.minio.loadbalancer.server.port=9001
       - traefik.http.routers.minio.service=minio
+      - traefik.http.routers.minio.middlewares=authelia@docker
   createbuckets:
     image: minio/mc
     networks:

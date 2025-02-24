@@ -36,6 +36,7 @@ services:
       - traefik.http.routers.typebotbuilder.entrypoints=web,websecure
       - traefik.http.routers.typebotbuilder.tls.certresolver=letsencrypt
       - traefik.http.services.typebotbuilder.loadbalancer.server.port=3000
+      - traefik.http.routers.typebotbuilder.middlewares=authelia@docker
 
   typebot-viewer:
     image: baptistearno/typebot-viewer:latest
@@ -54,6 +55,7 @@ services:
       - traefik.http.routers.typebotviewer.entrypoints=web,websecure
       - traefik.http.routers.typebotviewer.tls.certresolver=letsencrypt
       - traefik.http.services.typebotviewer.loadbalancer.server.port=3000
+      - traefik.http.routers.typebotviewer.middlewares=authelia@docker
 
 networks:
   growon:

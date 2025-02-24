@@ -1,0 +1,68 @@
+
+server:
+  address: 'tcp://:9091'
+
+log:
+  level: 'debug'
+
+totp:
+  issuer: 'growonit.online'
+
+identity_validation:
+  reset_password:
+    jwt_secret: 'wadawadawada'
+
+authentication_backend:
+  file:
+    path: '/config/users.yml'
+
+access_control:
+  default_policy: 'deny'
+  rules:
+    - domain: 'baserow.growonit.online'
+      policy: 'bypass'
+    - domain: 'api.growonit.online'
+      policy: 'bypass'
+    - domain: 's3.growonit.online'
+      policy: 'bypass'
+    - domain: 'minio.growonit.online'
+      policy: 'bypass'
+    - domain: 'n8n.growonit.online'
+      policy: 'bypass'
+    - domain: 'portainer.growonit.online'
+      policy: 'bypass'
+    - domain: 'traefik.growonit.online'
+      policy: 'one_factor'
+    - domain: 'typebot.growonit.online'
+      policy: 'bypass'
+
+session:
+  secret: 'wadawadawadawada'
+  name: 'authelia_session'
+  same_site: 'lax'
+  inactivity: '5m'
+  expiration: '1h'
+  remember_me: '1M'
+  cookies:
+    - domain: 'growonit.online'
+      authelia_url: 'https://auth.growonit.online'
+      name: 'authelia_session'
+      same_site: 'lax'
+      inactivity: '5m'
+      expiration: '1h'
+      remember_me: '1d'
+
+regulation:
+  max_retries: 3
+  find_time: '2 minutes'
+  ban_time: '5 minutes'
+
+storage:
+  encryption_key: 'as0a!sA!@!awda123asdseasSSd'
+  local:
+    path: '/config/db.sqlite3'
+
+notifier:
+  disable_startup_check: false
+  filesystem:
+    filename: '/config/notification.txt'

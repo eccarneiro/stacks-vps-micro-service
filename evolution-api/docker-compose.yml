@@ -20,6 +20,7 @@ services:
       - traefik.http.routers.evolution.entrypoints=websecure
       - traefik.http.routers.evolution.tls.certresolver=letsencrypt
       - traefik.http.services.evolution.loadbalancer.server.port=8080
+      - traefik.http.routers.evolution.middlewares=authelia@docker
   postgres:
     container_name: postgres
     image: postgres:15
