@@ -10,7 +10,7 @@ totp:
 
 identity_validation:
   reset_password:
-    jwt_secret: 'wadawadawada'
+    jwt_secret: 'vjj4s57b&AM'
 
 authentication_backend:
   file:
@@ -20,24 +20,24 @@ access_control:
   default_policy: 'deny'
   rules:
     - domain: 'baserow.growonit.online'
-      policy: 'bypass'
+      policy: 'one_factor'
     - domain: 'api.growonit.online'
-      policy: 'bypass'
+      policy: 'one_factor'
     - domain: 's3.growonit.online'
-      policy: 'bypass'
+      policy: 'one_factor'
     - domain: 'minio.growonit.online'
-      policy: 'bypass'
+      policy: 'one_factor'
     - domain: 'n8n.growonit.online'
-      policy: 'bypass'
+      policy: 'one_factor'
     - domain: 'portainer.growonit.online'
-      policy: 'bypass'
+      policy: 'one_factor'
     - domain: 'traefik.growonit.online'
       policy: 'one_factor'
     - domain: 'typebot.growonit.online'
-      policy: 'bypass'
+      policy: 'one_factor'
 
 session:
-  secret: 'wadawadawadawada'
+  secret: 't8k7CR1plrlR'
   name: 'authelia_session'
   same_site: 'lax'
   inactivity: '5m'

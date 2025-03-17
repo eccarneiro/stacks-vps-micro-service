@@ -11,7 +11,7 @@ services:
     networks:
       - growon
     env_file:
-      - .env
+      - .env  
     expose:
       - 8080
     labels:
@@ -21,6 +21,7 @@ services:
       - traefik.http.routers.evolution.tls.certresolver=letsencrypt
       - traefik.http.services.evolution.loadbalancer.server.port=8080
       - traefik.http.routers.evolution.middlewares=authelia@docker
+
   postgres:
     container_name: postgres
     image: postgres:15
@@ -28,22 +29,18 @@ services:
       - growon
     command: ["postgres", "-c", "max_connections=1000", "-c", "listen_addresses=*"]
     restart: always
-    ports:
+    expose:
       - 5432:5432
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=evolution
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=${POSTGRES_USER} 
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    expose:
-      - 5432
 
 volumes:
   evolution_instances:
   postgres_data:
-
 
 networks:
   growon:
